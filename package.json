@@ -1,0 +1,47 @@
+{
+  "name": "grunt-funky-browserify",
+  "description": "Create browserify bundles.",
+  "version": "0.1.1",
+  "homepage": "https://github.com/davemedema/grunt-funky-browserify",
+  "author": {
+    "name": "Dave Medema",
+    "email": "davemedema@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/davemedema/grunt-funky-browserify/issues"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "keywords": [
+    "gruntplugin",
+    "clean"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/davemedema/grunt-funky-browserify/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/davemedema/grunt-funky-browserify.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "browserify": "*",
+    "grunt": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-nodeunit": "*",
+    "grunt-funky-bump": "*",
+    "grunt-funky-tag": "*",
+    "load-grunt-tasks": "*"
+  }
+}
