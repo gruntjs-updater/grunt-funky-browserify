@@ -10,13 +10,8 @@ module.exports = function(grunt) {
     // package.json
     pkg: grunt.file.readJSON('package.json'),
 
-    // `clean`
-    clean: {
-      all: ['tmp']
-    },
-
-    // `funky_browserify`
-    funky_browserify: {
+    // `browserify`
+    browserify: {
       test: {
         options: {
           entryFile: 'test/fixtures/app/app.js',
@@ -28,6 +23,11 @@ module.exports = function(grunt) {
         ],
         dest: 'tmp/test.js'
       }
+    },
+
+    // `clean`
+    clean: {
+      all: ['tmp']
     },
 
     // `jshint`
@@ -66,11 +66,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('release', function(type) {
     grunt.task.run('test');
-    grunt.task.run('funky_bump:' + (type || 'patch'));
-    grunt.task.run('funky_tag');
+    grunt.task.run('bump:' + (type || 'patch'));
+    grunt.task.run('tag');
   });
 
-  grunt.registerTask('test', ['clean', 'jshint', 'funky_browserify', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'jshint', 'browserify', 'nodeunit']);
   grunt.registerTask('t', ['test']);
 
 };

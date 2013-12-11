@@ -22,7 +22,7 @@ module.exports = function(grunt) {
   var utils = require('funky-grunt-utils')(grunt);
 
   // Register task
-  grunt.registerMultiTask('funky_browserify', function() {
+  grunt.registerMultiTask('browserify', function() {
     var opts = this.options({
       entryFile: 'js/app/app.js',
       modulesDir: 'js/modules'
