@@ -12,13 +12,16 @@ var browserify = require('browserify');
 var fs         = require('fs');
 var path       = require('path');
 
+/**
+ * Exports.
+ *
+ * @param {Object} grunt
+ */
 module.exports = function(grunt) {
 
-  function failed(message, error) {
-    if (error) grunt.log.error(error);
-    grunt.fail.warn(message || 'Task failed.');
-  }
+  var utils = require('funky-grunt-utils')(grunt);
 
+  // Register task
   grunt.registerMultiTask('funky_browserify', function() {
     var opts = this.options({
       entryFile: 'js/app/app.js',
@@ -26,48 +29,43 @@ module.exports = function(grunt) {
     });
 
     var bundle    = browserify();
-    var bundleSrc = '';
+    var bundleStr = '';
+    var dest      = '';
     var done      = this.async();
-    var root      = path.resolve();
 
-    // Loop through file mappings
-    this.files.forEach(function(fileMapping) {
-      // Validate src files
-      var srcFiles = fileMapping.src.filter(function(filepath) {
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
-        }
+    // Set dest and concat libs
+    this.files.forEach(function(fm) {
+      if (fm.dest) dest = fm.dest;
+      fm.src.forEach(function(filepath) {
+        bundleStr += grunt.file.read(filepath) + '\n\n';
       });
+    });
 
-      // Concat libs
-      srcFiles.forEach(function(filepath) {
-        bundleSrc += grunt.file.read(filepath) + '\n\n';
-      });
+    // Validate dest
+    if (!dest) {
+      utils.fail('Destination file required.');
+    }
 
-      // Modules
-      var modulesDir = root + '/' + opts.modulesDir;
-      var modules = fs.readdirSync(modulesDir);
-      modules.forEach(function(filepath) {
-        if (path.extname(filepath) === '.js') {
-          var fullpath = modulesDir + '/' + filepath;
-          bundle.require(fullpath, {expose: path.basename(filepath, '.js')});
-        }
-      });
+    // Require modules
+    var modulesDir = path.resolve(opts.modulesDir);
+    var modules = fs.readdirSync(modulesDir);
+    modules.forEach(function(filepath) {
+      if (path.extname(filepath) === '.js') {
+        var fullpath = modulesDir + '/' + filepath;
+        bundle.require(fullpath, {expose: path.basename(filepath, '.js')});
+      }
+    });
 
-      // Entry
-      var entry = root + '/' + opts.entryFile;
-      bundle.add(entry);
+    // Add entry
+    var entry = path.resolve(opts.entryFile);
+    bundle.add(entry);
 
-      // Bundle and write
-      bundle.bundle(function(err, src) {
-        if (err) throw err;
-        bundleSrc += src;
-        grunt.file.write(fileMapping.dest, bundleSrc);
-        done();
-      });
+    // Bundle and write
+    bundle.bundle(function(err, str) {
+      if (err) throw err;
+      bundleStr += str;
+      grunt.file.write(dest, bundleStr);
+      done();
     });
   });
 
