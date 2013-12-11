@@ -65,6 +65,7 @@ module.exports = function(grunt) {
       if (err) throw err;
       bundleStr += str;
       grunt.file.write(dest, bundleStr);
+      grunt.log.ok('Bundled: ' + dest);
       done();
     });
   });
