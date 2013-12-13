@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "browserify": "*",
-    "funky-grunt-utils": "*",
     "grunt": "*",
     "grunt-contrib-clean": "*",
     "grunt-contrib-jshint": "*",

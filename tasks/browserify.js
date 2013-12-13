@@ -19,9 +19,7 @@ var path       = require('path');
  */
 module.exports = function(grunt) {
 
-  var utils = require('funky-grunt-utils')(grunt);
-
-  // Register task
+  // register task
   grunt.registerMultiTask('browserify', function() {
     var opts = this.options({
       entryFile: 'js/app/app.js',
@@ -33,7 +31,7 @@ module.exports = function(grunt) {
     var dest      = '';
     var done      = this.async();
 
-    // Set dest and concat libs
+    // set dest and concat libs
     this.files.forEach(function(fm) {
       if (fm.dest) dest = fm.dest;
       fm.src.forEach(function(filepath) {
@@ -41,12 +39,12 @@ module.exports = function(grunt) {
       });
     });
 
-    // Validate dest
+    // validate dest
     if (!dest) {
-      utils.fail('Destination file required.');
+      grunt.warn('Destination file required.');
     }
 
-    // Require modules
+    // require modules
     var modulesDir = path.resolve(opts.modulesDir);
     var modules = fs.readdirSync(modulesDir);
     modules.forEach(function(filepath) {
@@ -56,11 +54,11 @@ module.exports = function(grunt) {
       }
     });
 
-    // Add entry
+    // add entry
     var entry = path.resolve(opts.entryFile);
     bundle.add(entry);
 
-    // Bundle and write
+    // bundle and write
     bundle.bundle(function(err, str) {
       if (err) throw err;
       bundleStr += str;
